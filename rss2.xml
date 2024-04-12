@@ -15,8 +15,89 @@
     <atom:link href="https://flyboy716.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>专注于学习知识,分享生活,分享知识</description>
-    <pubDate>Fri, 12 Apr 2024 14:11:52 GMT</pubDate>
+    <pubDate>Fri, 12 Apr 2024 15:13:39 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>LearnedIndex-03</title>
+      <link>https://flyboy716.github.io/posts/4082.html</link>
+      <guid>https://flyboy716.github.io/posts/4082.html</guid>
+      <pubDate>Fri, 12 Apr 2024 15:10:47 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;数据库中的-B-树与-B-树&quot;&gt;&lt;a href=&quot;#数据库中的-B-树与-B-树&quot; class=&quot;headerlink&quot; title=&quot;数据库中的 B 树与 B+ 树&quot;&gt;&lt;/a&gt;数据库中的 B 树与 B+</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      
+      
+      <category domain="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      
+      
+      <comments>https://flyboy716.github.io/posts/4082.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>LearnedIndex-02</title>
+      <link>https://flyboy716.github.io/posts/8043.html</link>
+      <guid>https://flyboy716.github.io/posts/8043.html</guid>
+      <pubDate>Fri, 12 Apr 2024 15:10:26 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;数据库中的机器学习：哈希表、B-树与学习索引&quot;&gt;&lt;a href=&quot;#数据库中的机器学习：哈希表、B-树与学习索引&quot; class=&quot;headerlink&quot; title=&quot;数据库中的机器学习：哈希表、B 树与学习索引&quot;&gt;&lt;/a&gt;数据库中的机器学习：哈希表、B</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      
+      
+      <category domain="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      
+      
+      <comments>https://flyboy716.github.io/posts/8043.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>LearnedIndex-Lab</title>
+      <link>https://flyboy716.github.io/posts/30bd.html</link>
+      <guid>https://flyboy716.github.io/posts/30bd.html</guid>
+      <pubDate>Fri, 12 Apr 2024 15:07:38 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;问题分析&quot;&gt;&lt;a href=&quot;#问题分析&quot; class=&quot;headerlink&quot; title=&quot;问题分析&quot;&gt;&lt;/a&gt;问题分析&lt;/h1&gt;&lt;p&gt;传统的索引，如 哈希的点查询、B 树的范围查询还是位图的存在性查询，其本质都是给定一个 key，返回该 key</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://flyboy716.github.io/categories/%E5%AE%9E%E9%AA%8C/">实验</category>
+      
+      
+      <category domain="https://flyboy716.github.io/tags/%E5%AE%9E%E9%AA%8C/">实验</category>
+      
+      
+      <comments>https://flyboy716.github.io/posts/30bd.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>LearnedIndex</title>

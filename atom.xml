@@ -6,7 +6,7 @@
   <link href="https://flyboy716.github.io/atom.xml" rel="self"/>
   
   <link href="https://flyboy716.github.io/"/>
-  <updated>2024-04-12T14:11:52.826Z</updated>
+  <updated>2024-04-12T15:13:39.432Z</updated>
   <id>https://flyboy716.github.io/</id>
   
   <author>
@@ -15,6 +15,81 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>LearnedIndex-03</title>
+    <link href="https://flyboy716.github.io/posts/4082.html"/>
+    <id>https://flyboy716.github.io/posts/4082.html</id>
+    <published>2024-04-12T15:10:47.000Z</published>
+    <updated>2024-04-12T15:13:39.432Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;数据库中的-B-树与-B-树&quot;&gt;&lt;a href=&quot;#数据库中的-B-树与-B-树&quot; class=&quot;headerlink&quot; title=&quot;数据库中的 B 树与 B+ 树&quot;&gt;&lt;/a&gt;数据库中的 B 树与 B+</summary>
+        
+      
+    
+    
+    
+    <category term="学习型索引" scheme="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/"/>
+    
+    
+    <category term="学习型索引" scheme="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>LearnedIndex-02</title>
+    <link href="https://flyboy716.github.io/posts/8043.html"/>
+    <id>https://flyboy716.github.io/posts/8043.html</id>
+    <published>2024-04-12T15:10:26.000Z</published>
+    <updated>2024-04-12T15:11:58.000Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;数据库中的机器学习：哈希表、B-树与学习索引&quot;&gt;&lt;a href=&quot;#数据库中的机器学习：哈希表、B-树与学习索引&quot; class=&quot;headerlink&quot; title=&quot;数据库中的机器学习：哈希表、B 树与学习索引&quot;&gt;&lt;/a&gt;数据库中的机器学习：哈希表、B</summary>
+        
+      
+    
+    
+    
+    <category term="学习型索引" scheme="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/"/>
+    
+    
+    <category term="学习型索引" scheme="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>LearnedIndex-Lab</title>
+    <link href="https://flyboy716.github.io/posts/30bd.html"/>
+    <id>https://flyboy716.github.io/posts/30bd.html</id>
+    <published>2024-04-12T15:07:38.000Z</published>
+    <updated>2024-04-12T15:10:01.758Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;问题分析&quot;&gt;&lt;a href=&quot;#问题分析&quot; class=&quot;headerlink&quot; title=&quot;问题分析&quot;&gt;&lt;/a&gt;问题分析&lt;/h1&gt;&lt;p&gt;传统的索引，如 哈希的点查询、B 树的范围查询还是位图的存在性查询，其本质都是给定一个 key，返回该 key</summary>
+        
+      
+    
+    
+    
+    <category term="实验" scheme="https://flyboy716.github.io/categories/%E5%AE%9E%E9%AA%8C/"/>
+    
+    
+    <category term="实验" scheme="https://flyboy716.github.io/tags/%E5%AE%9E%E9%AA%8C/"/>
+    
+  </entry>
   
   <entry>
     <title>LearnedIndex</title>
