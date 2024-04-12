@@ -15,14 +15,14 @@
     <atom:link href="https://flyboy716.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>专注于学习知识,分享生活,分享知识</description>
-    <pubDate>Fri, 12 Apr 2024 12:42:54 GMT</pubDate>
+    <pubDate>Fri, 12 Apr 2024 13:21:30 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
-      <title>alex</title>
-      <link>https://flyboy716.github.io/posts/93f4.html</link>
-      <guid>https://flyboy716.github.io/posts/93f4.html</guid>
-      <pubDate>Fri, 12 Apr 2024 12:26:17 GMT</pubDate>
+      <title>Alex</title>
+      <link>https://flyboy716.github.io/posts/53ff.html</link>
+      <guid>https://flyboy716.github.io/posts/53ff.html</guid>
+      <pubDate>Fri, 12 Apr 2024 13:15:27 GMT</pubDate>
       
         
         
@@ -38,15 +38,42 @@
       <category domain="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
       
       
-      <category domain="https://flyboy716.github.io/tags/ALEX/">ALEX</category>
+      <category domain="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
       
       
-      <comments>https://flyboy716.github.io/posts/93f4.html#disqus_thread</comments>
+      <comments>https://flyboy716.github.io/posts/53ff.html#disqus_thread</comments>
       
     </item>
     
     <item>
-      <title>LearnedIndex_Papers</title>
+      <title>FINEdex</title>
+      <link>https://flyboy716.github.io/posts/323e.html</link>
+      <guid>https://flyboy716.github.io/posts/323e.html</guid>
+      <pubDate>Fri, 12 Apr 2024 13:00:13 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;研究现状&quot;&gt;&lt;a href=&quot;#研究现状&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      
+      
+      <category domain="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      
+      
+      <comments>https://flyboy716.github.io/posts/323e.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>LearnedIndex-Papers</title>
       <link>https://flyboy716.github.io/posts/5da4.html</link>
       <guid>https://flyboy716.github.io/posts/5da4.html</guid>
       <pubDate>Fri, 12 Apr 2024 12:15:42 GMT</pubDate>
@@ -65,37 +92,10 @@
       <category domain="https://flyboy716.github.io/categories/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86/">论文整理</category>
       
       
-      <category domain="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      <category domain="https://flyboy716.github.io/tags/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86/">论文整理</category>
       
       
       <comments>https://flyboy716.github.io/posts/5da4.html#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>LearnedIndex</title>
-      <link>https://flyboy716.github.io/posts/22ca.html</link>
-      <guid>https://flyboy716.github.io/posts/22ca.html</guid>
-      <pubDate>Fri, 12 Apr 2024 12:10:16 GMT</pubDate>
-      
-        
-        
-          
-          
-      <description>&lt;h2 id=&quot;The-Case-for-Learned-Index-Structures&quot;&gt;&lt;a href=&quot;#The-Case-for-Learned-Index-Structures&quot; class=&quot;headerlink&quot; title=&quot;The Case for</description>
-          
-        
-      
-      
-      
-      
-      <category domain="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
-      
-      
-      <category domain="https://flyboy716.github.io/tags/%E7%B4%A2%E5%BC%95/">索引</category>
-      
-      
-      <comments>https://flyboy716.github.io/posts/22ca.html#disqus_thread</comments>
       
     </item>
     
@@ -116,10 +116,10 @@
       
       
       
-      <category domain="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      <category domain="https://flyboy716.github.io/categories/%E5%8D%9A%E5%AE%A2/">博客</category>
       
       
-      <category domain="https://flyboy716.github.io/tags/%E7%B4%A2%E5%BC%95/">索引</category>
+      <category domain="https://flyboy716.github.io/tags/%E5%8D%9A%E5%AE%A2/">博客</category>
       
       
       <comments>https://flyboy716.github.io/posts/22ca.html#disqus_thread</comments>
