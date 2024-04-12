@@ -2,31 +2,6 @@
 <search> 
   
   
-    
-    <entry>
-      <title>二分算法</title>
-      <link href="posts/b55d.html"/>
-      <url>posts/b55d.html</url>
-      
-        <content type="html"><![CDATA[<h3 id="思想："><a href="#思想：" class="headerlink" title="思想："></a>思想：</h3><p><strong>对含答案的区间进行二分处理，每次将区间一分为二，并只保留含答案的区间，当区间长度为1时，这个区间里的数就是答案。（此时 l == r）</strong></p><p><strong>二分和单调性的关系：</strong><br><strong>有单调性的一定可以二分，但可以二分的不一定有单调性，即没有单调性也可以二分。</strong></p><p><strong>何时用二分:</strong><br><strong>最优化问题（如求最长的长度）求解很困难时，可将问题转化为判定问题：判定一个数合不合法，合法看右边有没有更大值；不合法再看左边找最优解</strong></p><h3 id="二分模板总结"><a href="#二分模板总结" class="headerlink" title="二分模板总结"></a>二分模板总结</h3><p><strong><a href="https://www.acwing.com/blog/content/31/">二分查找算法模板</a></strong></p><h3 id="浮点数二分-无需考虑边界问题"><a href="#浮点数二分-无需考虑边界问题" class="headerlink" title="浮点数二分(无需考虑边界问题)"></a>浮点数二分(无需考虑边界问题)</h3><ul><li><strong>浮点数二分解题步骤：</strong></li><li>*1.取含答案的区间[l, r]。</li></ul><p>2.根据题意找到一个具有二段性的判断条件，并且使答案一定是该二段性的分界点。<br>3.分析中点mid = (l + r) / 2 在该判断条件下是否成立。<br>  如果成立，考虑答案在哪个区间；<br>  如果不成立，考虑答案在哪个区间。<br>4.确定更新方式r = mid 或 l = mid。**<br>[^1]<br>[^1]:<strong>附：浮点数二分循环结束条件：<br>区间精度至少要比题目要保留的小数位数高2位。<br>（以上题目均引自AcWing）</strong></p><ul><li><strong>题目归纳</strong></li><li>*<a href="https://www.acwing.com/problem/content/792/">数的三次方根</a>**</li><li>*<a href="https://www.acwing.com/problem/content/description/682/">剪绳子</a>**</li></ul><h3 id="整数二分（需要考虑边界问题）"><a href="#整数二分（需要考虑边界问题）" class="headerlink" title="整数二分（需要考虑边界问题）"></a>整数二分（需要考虑边界问题）</h3><ul><li>**整数二分解题步骤：</li></ul><p>1.取含答案的区间[l, r]。<br>2.根据题意找到一个具有二段性的判断条件，并且使答案一定是该二段性的分界点。<br>3.分析中点mid在该判断条件下是否成立。<br>  如果成立，考虑答案在哪个区间；<br>  如果不成立，考虑答案在哪个区间。<br>4.当分段点左侧满足性质时，r = mid,否则 l = mid+ 1,mid = l + r &gt;&gt; 1;<br>   当分段点右侧满足性质时，l = mid,否则 r = mid - 1, mid = l + r + 1 &gt;&gt; 1.)<br>     中间值属于右区间，用上取整；属于左区间，用下取整。**</p><ul><li><strong>题目归纳</strong><br>  <strong><a href="https://www.acwing.com/problem/content/1229/">分巧克力</a></strong></li><li>*<a href="https://www.acwing.com/problem/content/20/"> 旋转数组的最小数字</a>**</li></ul>]]></content>
-      
-      
-      <categories>
-          
-          <category> 算法 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 二分算法 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
   
   
 </search>
