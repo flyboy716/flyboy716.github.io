@@ -1101,7 +1101,7 @@
                                     <div class="info-break-policy">
                                         <i class="far fa-file-word fa-fw"></i>
                                         文章字数:&nbsp;&nbsp;
-                                            3.5k
+                                            2.7k
                                     </div>
                                     
 
@@ -1109,7 +1109,7 @@
                                             <div class="info-break-policy">
                                                 <i class="far fa-clock fa-fw"></i>
                                                 阅读时长:&nbsp;&nbsp;
-                                                    14
+                                                    10
                                                         分
                                             </div>
                                             
@@ -1134,31 +1134,31 @@
                                 <h1 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h1><p>传统的索引，如 哈希的点查询、B 树的范围查询还是位图的存在性查询，其本质都是给定一个 key，返回该 key 对应的数据位置position，这本质就是一个 model。所以，我们可以尝试使用 ML 中的经典回归模型，如：线性回归、支持向量机、决策树、神经网络等来拟合单变量 key 与 position 之间的函数关系。同样的，我们也可以将模型推广到多维（多变量）甚至高维以构建多维数据甚至高维数据索引。</p>
 <h2 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h2><p>B树啥的都有多层，所以ML也训练多层，即分层训练（目前就两层），先训练最顶层，然后进行数据分发，再训练底层。具体地，上层将 key 预测到具体的下层，该下层就拥有这条训练数据。随着层数的加深，以及每一层模型数量的提升，每个越底层模型拥有的训练数据就越少。这样的优点是底层模型可以非常容易的拟合这一部分数据的分布；缺点是较少的数据量带来了模型的选择限制，复杂模型没法收敛。实践中，越简单的模型越好。</p>
 <p>上层预测的 key 可由：预测值 * 下一层模型总数 / 最大的position 下取整获得其该分发给下层哪个模型。</p>
-<h1 id="生成数据集训练模型"><a href="#生成数据集训练模型" class="headerlink" title="生成数据集训练模型"></a>生成数据集训练模型</h1><h2 id="生成数据集"><a href="#生成数据集" class="headerlink" title="生成数据集"></a>生成数据集</h2><pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> random
-<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
-<span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
+<h1 id="生成数据集训练模型"><a href="#生成数据集训练模型" class="headerlink" title="生成数据集训练模型"></a>生成数据集训练模型</h1><h2 id="生成数据集"><a href="#生成数据集" class="headerlink" title="生成数据集"></a>生成数据集</h2><pre class=" language-lang-python"><code class="language-lang-python">import random
+import numpy as np
+import pandas as pd
 
-num_data <span class="token operator">=</span> <span class="token number">10000</span>    <span class="token comment" spellcheck="true"># 数据量</span>
-paras <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">30000.0</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 均匀分布上下限</span>
+num_data = 10000    # 数据量
+paras = [0, 30000.0]  # 均匀分布上下限
 
-random<span class="token punctuation">.</span>seed<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 定义随机种子</span>
-datasets <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 定义数据集</span>
+random.seed()  # 定义随机种子
+datasets = []  # 定义数据集
 
-low_range<span class="token punctuation">,</span> max_range <span class="token operator">=</span> paras<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> paras<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 均匀分布上下限</span>
-length <span class="token operator">=</span> max_range <span class="token operator">-</span> low_range
-<span class="token comment" spellcheck="true"># 生成满足均匀分布的 num_data 个数的数据集</span>
+low_range, max_range = paras[0], paras[1]  # 均匀分布上下限
+length = max_range - low_range
+# 生成满足均匀分布的 num_data 个数的数据集
 
-<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>num_data<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    datasets<span class="token punctuation">.</span>append<span class="token punctuation">(</span>int<span class="token punctuation">(</span>low_range <span class="token operator">+</span> random<span class="token punctuation">.</span>random<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> length<span class="token punctuation">)</span><span class="token punctuation">)</span>
+for i in range(num_data):
+    datasets.append(int(low_range + random.random() * length))
 
-<span class="token comment" spellcheck="true"># 从小到大进行排序: learned index 要求 key 有序</span>
-datasets <span class="token operator">=</span> sorted<span class="token punctuation">(</span>datasets<span class="token punctuation">)</span>
-position <span class="token operator">=</span> <span class="token punctuation">[</span>i <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>datasets<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 模拟生成 key 对应的 local_local_local_local_local_local_local_local_position</span>
-datasets <span class="token operator">=</span> np<span class="token punctuation">.</span>column_stack<span class="token punctuation">(</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>datasets<span class="token punctuation">)</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>position<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-df <span class="token operator">=</span> pd<span class="token punctuation">.</span>DataFrame<span class="token punctuation">(</span>data<span class="token operator">=</span>datasets<span class="token punctuation">,</span> columns<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">"key"</span><span class="token punctuation">,</span> <span class="token string">"position"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-df<span class="token punctuation">.</span>to_csv<span class="token punctuation">(</span><span class="token string">"output.csv"</span><span class="token punctuation">)</span>
+# 从小到大进行排序: learned index 要求 key 有序
+datasets = sorted(datasets)
+position = [i for i in range(len(datasets))]  # 模拟生成 key 对应的 local_local_local_local_local_local_local_local_position
+datasets = np.column_stack((np.array(datasets), np.array(position)))
+df = pd.DataFrame(data=datasets, columns=["key", "position"])
+df.to_csv("output.csv")
 
-<span class="token comment" spellcheck="true"># 值得注意的是:均匀分布随机生成的key可能有重复，实际中，数据可能跨页存储，所以key对应的position也可能有多个（个人理解）</span>
+# 值得注意的是:均匀分布随机生成的key可能有重复，实际中，数据可能跨页存储，所以key对应的position也可能有多个（个人理解）
 </code></pre>
 <h2 id="索引实现"><a href="#索引实现" class="headerlink" title="索引实现"></a>索引实现</h2><pre><code>首先，通过一个两层的循环遍历所有的训练阶段和模型。在每个阶段中，为每个模型添加一个空列表。
 如果不是最后一个阶段，则需要为下一个阶段初始化数据集。创建一个空的next_key列表和next_pos列表，长度为下一个阶段的模型数量。
@@ -1175,175 +1175,176 @@ df<span class="token punctuation">.</span>to_csv<span class="token punctuation">
 遍历数据加载器中的每个样本，计算下一阶段应该分配给哪个模型。使用当前模型对当前样本的输出值进行处理，根据输出值、下一阶段模型的数量和最大位置来计算模型的选择。
 将当前样本添加到对应的数据集中。
 为下一个阶段创建对应的数据集，将next_key和next_pos加载进去。重复以上步骤，直到完成所有的训练阶段和模型的训练。
+</code></pre><h3 id="导入相关依赖"><a href="#导入相关依赖" class="headerlink" title="导入相关依赖"></a>导入相关依赖</h3><pre class=" language-lang-python"><code class="language-lang-python">import torch
+import torch.nn as nn  # 方便使用 全连接层
+import torch.utils.data as torch_data  # 方便数据处理
+import warnings
+from matplotlib import pyplot as plt
+warnings.filterwarnings("ignore")  # 忽略警告信息
+plt.rcParams["font.sans-serif"] = ["SimHei"]  # 显示中文
+plt.rcParams["axes.unicode_minus"] = False  # 显示负数
 </code></pre>
-<h3 id="导入相关依赖"><a href="#导入相关依赖" class="headerlink" title="导入相关依赖"></a>导入相关依赖</h3><pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> torch
-<span class="token keyword">import</span> torch<span class="token punctuation">.</span>nn <span class="token keyword">as</span> nn  <span class="token comment" spellcheck="true"># 方便使用 全连接层</span>
-<span class="token keyword">import</span> torch<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>data <span class="token keyword">as</span> torch_data  <span class="token comment" spellcheck="true"># 方便数据处理</span>
-<span class="token keyword">import</span> warnings
-<span class="token keyword">from</span> matplotlib <span class="token keyword">import</span> pyplot <span class="token keyword">as</span> plt
-warnings<span class="token punctuation">.</span>filterwarnings<span class="token punctuation">(</span><span class="token string">"ignore"</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 忽略警告信息</span>
-plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">"font.sans-serif"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"SimHei"</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 显示中文</span>
-plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">"axes.unicode_minus"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">False</span>  <span class="token comment" spellcheck="true"># 显示负数</span>
+<h3 id="定义相关类"><a href="#定义相关类" class="headerlink" title="定义相关类"></a>定义相关类</h3><pre class=" language-lang-python"><code class="language-lang-python"># 定义数据集类方便处理数据
+class Dataset(torch_data.Dataset):
+    def __init__(self, keys_list, pos_list):
+        self.keys = keys_list   # 定义键集合
+        self.pos = pos_list     # 定义 position集合
+
+    def __len__(self):
+        return len(self.keys)  # 获取keys长度
+
+    def __getitem__(self, index):
+        return self.keys[index], self.pos[index]  # 获取指定 index 的 item(key, value)
+
+
+# 继承 nn.Module 方便自定义 BP 模型
+class Network(nn.Module):
+    def __init__(self, hidden_num, hidden_size):  # 隐藏层数量, 每个隐藏层神经元数量
+        super(Network, self).__init__()
+        self.hidden_num = hidden_num
+        self.fc = []  # 存储全连接层
+        self.relu = []  # ReLU 激活函数
+        input_size = 1  # 前一层大小(亦为当前层大小)
+        for fc_idx in range(hidden_num):
+            self.fc.append(nn.Linear(input_size, hidden_size[fc_idx]))  # 添加全连接层
+            self.relu.append(nn.ReLU())  # 添加 ReLU 激活函数
+            input_size = hidden_size[fc_idx]  # 当前层的输出是下一层的输入
+        # 创建输出层，其输入维度为最后一个隐藏层的输出维度，输出维度为1
+        self.last = nn.Linear(input_size, 1)
+
+    # 定义前向传播函数
+    def forward(self, x):
+        out = x
+        for fc_idx in range(self.hidden_num):
+            # 通过循环将输入x依次传递给全连接层和ReLU激活函数
+            out = self.fc[fc_idx](out)
+            out = self.relu[fc_idx](out)
+        out = self.last(out)  # 将输出传递给输出层
+        return out
 </code></pre>
-<h3 id="定义相关类"><a href="#定义相关类" class="headerlink" title="定义相关类"></a>定义相关类</h3><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 定义数据集类方便处理数据</span>
-<span class="token keyword">class</span> <span class="token class-name">Dataset</span><span class="token punctuation">(</span>torch_data<span class="token punctuation">.</span>Dataset<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> keys_list<span class="token punctuation">,</span> pos_list<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        self<span class="token punctuation">.</span>keys <span class="token operator">=</span> keys_list   <span class="token comment" spellcheck="true"># 定义键集合</span>
-        self<span class="token punctuation">.</span>pos <span class="token operator">=</span> pos_list     <span class="token comment" spellcheck="true"># 定义 position集合</span>
+<h3 id="定义相关变量"><a href="#定义相关变量" class="headerlink" title="定义相关变量"></a>定义相关变量</h3><pre class=" language-lang-python"><code class="language-lang-python"># 加载数据集
+datasets = pd.read_csv("output.csv", header=0, names=["key", "position"])
 
-    <span class="token keyword">def</span> <span class="token function">__len__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">return</span> len<span class="token punctuation">(</span>self<span class="token punctuation">.</span>keys<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 获取keys长度</span>
+# 将 Serious 数据转换成 PyTorch tensor 张量
+keys = [torch.Tensor([x]) for x in datasets["key"].values]
+pos = [torch.Tensor([x]) for x in datasets["position"].values]
 
-    <span class="token keyword">def</span> <span class="token function">__getitem__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> index<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">return</span> self<span class="token punctuation">.</span>keys<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>pos<span class="token punctuation">[</span>index<span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 获取指定 index 的 item(key, value)</span>
+# 第一个阶段加载所有数据
+ds = [[Dataset(keys, pos)]]  # ds 2 维: 行表示阶段,行内表示每阶段模型所需数据集---动态扩容
 
+torch.set_num_threads(8)  # 设置运行计算 线程数 16
+device = torch.device("cpu")  # 运行在 CPU 上(有服务器的可运行在 GPU 上)
 
-<span class="token comment" spellcheck="true"># 继承 nn.Module 方便自定义 BP 模型</span>
-<span class="token keyword">class</span> <span class="token class-name">Network</span><span class="token punctuation">(</span>nn<span class="token punctuation">.</span>Module<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> hidden_num<span class="token punctuation">,</span> hidden_size<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 隐藏层数量, 每个隐藏层神经元数量</span>
-        super<span class="token punctuation">(</span>Network<span class="token punctuation">,</span> self<span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>
-        self<span class="token punctuation">.</span>hidden_num <span class="token operator">=</span> hidden_num
-        self<span class="token punctuation">.</span>fc <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 存储全连接层</span>
-        self<span class="token punctuation">.</span>relu <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># ReLU 激活函数</span>
-        input_size <span class="token operator">=</span> <span class="token number">1</span>  <span class="token comment" spellcheck="true"># 前一层大小(亦为当前层大小)</span>
-        <span class="token keyword">for</span> fc_idx <span class="token keyword">in</span> range<span class="token punctuation">(</span>hidden_num<span class="token punctuation">)</span><span class="token punctuation">:</span>
-            self<span class="token punctuation">.</span>fc<span class="token punctuation">.</span>append<span class="token punctuation">(</span>nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>input_size<span class="token punctuation">,</span> hidden_size<span class="token punctuation">[</span>fc_idx<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 添加全连接层</span>
-            self<span class="token punctuation">.</span>relu<span class="token punctuation">.</span>append<span class="token punctuation">(</span>nn<span class="token punctuation">.</span>ReLU<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 添加 ReLU 激活函数</span>
-            input_size <span class="token operator">=</span> hidden_size<span class="token punctuation">[</span>fc_idx<span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 当前层的输出是下一层的输入</span>
-        <span class="token comment" spellcheck="true"># 创建输出层，其输入维度为最后一个隐藏层的输出维度，输出维度为1</span>
-        self<span class="token punctuation">.</span>last <span class="token operator">=</span> nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>input_size<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
-
-    <span class="token comment" spellcheck="true"># 定义前向传播函数</span>
-    <span class="token keyword">def</span> <span class="token function">forward</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        out <span class="token operator">=</span> x
-        <span class="token keyword">for</span> fc_idx <span class="token keyword">in</span> range<span class="token punctuation">(</span>self<span class="token punctuation">.</span>hidden_num<span class="token punctuation">)</span><span class="token punctuation">:</span>
-            <span class="token comment" spellcheck="true"># 通过循环将输入x依次传递给全连接层和ReLU激活函数</span>
-            out <span class="token operator">=</span> self<span class="token punctuation">.</span>fc<span class="token punctuation">[</span>fc_idx<span class="token punctuation">]</span><span class="token punctuation">(</span>out<span class="token punctuation">)</span>
-            out <span class="token operator">=</span> self<span class="token punctuation">.</span>relu<span class="token punctuation">[</span>fc_idx<span class="token punctuation">]</span><span class="token punctuation">(</span>out<span class="token punctuation">)</span>
-        out <span class="token operator">=</span> self<span class="token punctuation">.</span>last<span class="token punctuation">(</span>out<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 将输出传递给输出层</span>
-        <span class="token keyword">return</span> out
+models = []  # 2-dim: 定义不同阶段采用的模型
+model_nums = (1, 8)  # 定义不同阶段的模型数量(此处只有两个阶段: 第一个阶段1个模型,第二个阶段8个模型)
+model_params = ((2, [4, 8]), (2, [4, 8]))  # 定义不同阶段模型参数: hidden_num, hidden_size
+max_pos = len(keys)  # 索引(位置) 的最大值, 方便确定下一阶段采用哪个模型
+stage_nums = len(model_nums)  # 阶段数量，论文图示为3个阶段，修改 model_nums、model_params 即可
 </code></pre>
-<h3 id="定义相关变量"><a href="#定义相关变量" class="headerlink" title="定义相关变量"></a>定义相关变量</h3><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 加载数据集</span>
-datasets <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span><span class="token string">"output.csv"</span><span class="token punctuation">,</span> header<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> names<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">"key"</span><span class="token punctuation">,</span> <span class="token string">"position"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<h3 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h3><pre class=" language-lang-python"><code class="language-lang-python"># 创建一个2x9的子图布局
+# fig, axs = plt.subplots(2, 8)
 
-<span class="token comment" spellcheck="true"># 将 Serious 数据转换成 PyTorch tensor 张量</span>
-keys <span class="token operator">=</span> <span class="token punctuation">[</span>torch<span class="token punctuation">.</span>Tensor<span class="token punctuation">(</span><span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token keyword">for</span> x <span class="token keyword">in</span> datasets<span class="token punctuation">[</span><span class="token string">"key"</span><span class="token punctuation">]</span><span class="token punctuation">.</span>values<span class="token punctuation">]</span>
-pos <span class="token operator">=</span> <span class="token punctuation">[</span>torch<span class="token punctuation">.</span>Tensor<span class="token punctuation">(</span><span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token keyword">for</span> x <span class="token keyword">in</span> datasets<span class="token punctuation">[</span><span class="token string">"position"</span><span class="token punctuation">]</span><span class="token punctuation">.</span>values<span class="token punctuation">]</span>
+for stage_index in range(stage_nums):  # 遍历所有训练阶段---目前就两个阶段
+    models.append([])  # 为每个阶段添加训练模型
 
-<span class="token comment" spellcheck="true"># 第一个阶段加载所有数据</span>
-ds <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span>Dataset<span class="token punctuation">(</span>keys<span class="token punctuation">,</span> pos<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># ds 2 维: 行表示阶段,行内表示每阶段模型所需数据集---动态扩容</span>
+    if stage_index != stage_nums - 1:  # 判断是否是最后一个阶段
+        # 不是最后一个阶段时,需要为下一个阶段初始化数据集
+        next_key = [[] for i in range(model_nums[stage_index + 1])]
+        # 此处下一个阶段有8个模型，每个模型都需要key、pos,故需要初始化8个空的key、pos:2-dim,每个模型对应的数据集
+        next_pos = [[] for i in range(model_nums[stage_index + 1])]
 
-torch<span class="token punctuation">.</span>set_num_threads<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 设置运行计算 线程数 16</span>
-device <span class="token operator">=</span> torch<span class="token punctuation">.</span>device<span class="token punctuation">(</span><span class="token string">"cpu"</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 运行在 CPU 上(有服务器的可运行在 GPU 上)</span>
+    for model_index in range(model_nums[stage_index]):  # 当前阶段模型训练数量
+        error_mean = &#123;&#125;    # 记录每阶段每个模型的loss信息以便绘图
+        # 初始化模型, 两个参数: 对应隐藏层数量, 每个隐藏层神经元数量
+        model = Network(model_params[stage_index][0], model_params[stage_index][1]).to(device)
+        criterion = nn.MSELoss()  # 代价函数使用均方误差MSE
+        optimizer = torch.optim.Adam(model.parameters(), lr=0.001)  # 优化器使用 adam 算法, 学习率0.001
 
-models <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 2-dim: 定义不同阶段采用的模型</span>
-model_nums <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 定义不同阶段的模型数量(此处只有两个阶段: 第一个阶段1个模型,第二个阶段8个模型)</span>
-model_params <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 定义不同阶段模型参数: hidden_num, hidden_size</span>
-max_pos <span class="token operator">=</span> len<span class="token punctuation">(</span>keys<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 索引(位置) 的最大值, 方便确定下一阶段采用哪个模型</span>
-stage_nums <span class="token operator">=</span> len<span class="token punctuation">(</span>model_nums<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 阶段数量，论文图示为3个阶段，修改 model_nums、model_params 即可</span>
+        # 从ds中按照批次大小为64加载当前阶段当前模型对应的样本数量，有序故不能打乱
+        data_gen = torch_data.DataLoader(ds[stage_index][model_index], batch_size=64, shuffle=False)
+        last_loss = float("inf")  # 早停: loss 停止下降, 模型就停止训练
+        # 打印i阶段j模型训练的数据量信息
+        print("Stage=&#123;&#125;, Model=&#123;&#125;, 训练集: &#123;&#125; 个样本".format(stage_index, model_index, len(ds[stage_index][model_index])))
+
+        # 迭代最多 1000 次
+        for epoch in range(1000):
+            print("Epoch", epoch)  # 打印当前迭代次数（epoch）
+            # 模型训练
+            for local_keys, local_pos in data_gen:  # 从数据加载器中依次提取keys、pos
+                # 将 key 和 pos 移动到指定的设备上
+                local_keys, local_pos = local_keys.to(device), local_pos.to(device)
+                # 使用模型对输入数据进行前向传播，得到输出结果（outputs）
+                outputs = model(local_keys)
+                # print(outputs)
+                # 计算损失值---MSE
+                loss = criterion(outputs, local_pos)
+                # print("损失值为: ", "===", loss)
+                optimizer.zero_grad()  # 清空优化器的梯度缓存,
+                loss.backward()  # 然后进行反向传播
+                optimizer.step()  # 计算梯度并更新模型参数
+
+            # 计算当前迭代下当前获取的数据集的总损失值
+            with torch.set_grad_enabled(False):  # 设置梯度计算为禁用状态
+                loss_sum = 0.0  # 总损失值
+                for local_keys, local_pos in data_gen:
+                    local_keys, local_pos = local_keys.to(device), local_pos.to(device)
+                    outputs = model(local_keys)
+                    loss = criterion(outputs, local_pos)
+                    loss_sum += loss.item()
+
+                print("Loss:", loss_sum / len(ds[stage_index][model_index]))  # 打印总平均损失值
+                error_mean[epoch] = loss_sum / len(ds[stage_index][model_index])
+                if ((loss_sum - last_loss) > 0) or (abs(last_loss - loss_sum) / last_loss < 0.001): # 如果后一次比前一次大或者两次迭代比率小于lr均停止迭代
+                    break
+                else:
+                    last_loss = loss_sum   # 更新loss
+
+        # 绘制各阶段各模型的损失函数图
+        # axs[stage_index, model_index].plot(error_mean.keys(), error_mean.values())
+        # axs[stage_index, model_index].set_title("Loss of S&#123;&#125;,M&#123;&#125;".format(stage_index, model_index))
+        plt.plot(error_mean.keys(), error_mean.values())
+        plt.title("Loss of Stage_&#123;&#125;,Model_&#123;&#125;".format(stage_index, model_index))
+        plt.show()
+
+        models[stage_index].append(model)  # 将训练好的模型添加到模型树中
+
+        # 开始上层 Model 向下层 Model 分发数据集
+        if stage_index != stage_nums - 1:  # 若还不是最后一个阶段
+            # 根据当前阶段和模型的索引，从数据集中加载样本
+            data_gen = torch_data.DataLoader(ds[stage_index][model_index], batch_size=1, shuffle=False)
+            for local_keys, local_pos in data_gen:  # 遍历数据加载器中的每个样本
+                local_keys, local_pos = local_keys.to(device), local_pos.to(device)
+
+                # 计算下一阶段应该分配给哪个模型: 使用当前模型对当前样本的输出值进行处理，
+                # 根据输出值、下一阶段模型的数量和最大位置来计算模型的选择
+                output = model(local_keys)
+                # 预测的pos*下一个阶段模型总数/最大的pos--->下取整
+                model_select = int(output.item() * model_nums[stage_index + 1] / max_pos)
+                if model_select >= model_nums[stage_index + 1]:  # 超过上限取上限
+                    model_select = model_nums[stage_index + 1] - 1
+                elif model_select <= 0:  # 小于下限取下限
+                    model_select = 0
+
+                # 根据模型的选择，将当前样本添加到对应的数据集中
+                next_key[model_select].append(local_keys)
+                next_pos[model_select].append(local_pos)
+
+    # 为下一个阶段创建对应数据集
+    if stage_index != stage_nums - 1:
+        ds.append([])  # 扩容---增加一行
+        for next_model_index in range(model_nums[stage_index + 1]):
+            ds[stage_index + 1].append(Dataset(next_key[next_model_index], next_pos[next_model_index]))  # 将对应数据集加载进去
 </code></pre>
-<h3 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h3><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 创建一个2x9的子图布局</span>
-<span class="token comment" spellcheck="true"># fig, axs = plt.subplots(2, 8)</span>
-
-<span class="token keyword">for</span> stage_index <span class="token keyword">in</span> range<span class="token punctuation">(</span>stage_nums<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 遍历所有训练阶段---目前就两个阶段</span>
-    models<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 为每个阶段添加训练模型</span>
-
-    <span class="token keyword">if</span> stage_index <span class="token operator">!=</span> stage_nums <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 判断是否是最后一个阶段</span>
-        <span class="token comment" spellcheck="true"># 不是最后一个阶段时,需要为下一个阶段初始化数据集</span>
-        next_key <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>model_nums<span class="token punctuation">[</span>stage_index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
-        <span class="token comment" spellcheck="true"># 此处下一个阶段有8个模型，每个模型都需要key、pos,故需要初始化8个空的key、pos:2-dim,每个模型对应的数据集</span>
-        next_pos <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>model_nums<span class="token punctuation">[</span>stage_index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
-
-    <span class="token keyword">for</span> model_index <span class="token keyword">in</span> range<span class="token punctuation">(</span>model_nums<span class="token punctuation">[</span>stage_index<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 当前阶段模型训练数量</span>
-        error_mean <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token comment" spellcheck="true">#123;&amp;#125;    # 记录每阶段每个模型的loss信息以便绘图</span>
-        <span class="token comment" spellcheck="true"># 初始化模型, 两个参数: 对应隐藏层数量, 每个隐藏层神经元数量</span>
-        model <span class="token operator">=</span> Network<span class="token punctuation">(</span>model_params<span class="token punctuation">[</span>stage_index<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> model_params<span class="token punctuation">[</span>stage_index<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span>
-        criterion <span class="token operator">=</span> nn<span class="token punctuation">.</span>MSELoss<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 代价函数使用均方误差MSE</span>
-        optimizer <span class="token operator">=</span> torch<span class="token punctuation">.</span>optim<span class="token punctuation">.</span>Adam<span class="token punctuation">(</span>model<span class="token punctuation">.</span>parameters<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> lr<span class="token operator">=</span><span class="token number">0.001</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 优化器使用 adam 算法, 学习率0.001</span>
-
-        <span class="token comment" spellcheck="true"># 从ds中按照批次大小为64加载当前阶段当前模型对应的样本数量，有序故不能打乱</span>
-        data_gen <span class="token operator">=</span> torch_data<span class="token punctuation">.</span>DataLoader<span class="token punctuation">(</span>ds<span class="token punctuation">[</span>stage_index<span class="token punctuation">]</span><span class="token punctuation">[</span>model_index<span class="token punctuation">]</span><span class="token punctuation">,</span> batch_size<span class="token operator">=</span><span class="token number">64</span><span class="token punctuation">,</span> shuffle<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
-        last_loss <span class="token operator">=</span> float<span class="token punctuation">(</span><span class="token string">"inf"</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 早停: loss 停止下降, 模型就停止训练</span>
-        <span class="token comment" spellcheck="true"># 打印i阶段j模型训练的数据量信息</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Stage=&amp;#123;&amp;#125;, Model=&amp;#123;&amp;#125;, 训练集: &amp;#123;&amp;#125; 个样本"</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span>stage_index<span class="token punctuation">,</span> model_index<span class="token punctuation">,</span> len<span class="token punctuation">(</span>ds<span class="token punctuation">[</span>stage_index<span class="token punctuation">]</span><span class="token punctuation">[</span>model_index<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-        <span class="token comment" spellcheck="true"># 迭代最多 1000 次</span>
-        <span class="token keyword">for</span> epoch <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Epoch"</span><span class="token punctuation">,</span> epoch<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 打印当前迭代次数（epoch）</span>
-            <span class="token comment" spellcheck="true"># 模型训练</span>
-            <span class="token keyword">for</span> local_keys<span class="token punctuation">,</span> local_pos <span class="token keyword">in</span> data_gen<span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 从数据加载器中依次提取keys、pos</span>
-                <span class="token comment" spellcheck="true"># 将 key 和 pos 移动到指定的设备上</span>
-                local_keys<span class="token punctuation">,</span> local_pos <span class="token operator">=</span> local_keys<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span><span class="token punctuation">,</span> local_pos<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span>
-                <span class="token comment" spellcheck="true"># 使用模型对输入数据进行前向传播，得到输出结果（outputs）</span>
-                outputs <span class="token operator">=</span> model<span class="token punctuation">(</span>local_keys<span class="token punctuation">)</span>
-                <span class="token comment" spellcheck="true"># print(outputs)</span>
-                <span class="token comment" spellcheck="true"># 计算损失值---MSE</span>
-                loss <span class="token operator">=</span> criterion<span class="token punctuation">(</span>outputs<span class="token punctuation">,</span> local_pos<span class="token punctuation">)</span>
-                <span class="token comment" spellcheck="true"># print("损失值为: ", "===", loss)</span>
-                optimizer<span class="token punctuation">.</span>zero_grad<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 清空优化器的梯度缓存,</span>
-                loss<span class="token punctuation">.</span>backward<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 然后进行反向传播</span>
-                optimizer<span class="token punctuation">.</span>step<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 计算梯度并更新模型参数</span>
-
-            <span class="token comment" spellcheck="true"># 计算当前迭代下当前获取的数据集的总损失值</span>
-            <span class="token keyword">with</span> torch<span class="token punctuation">.</span>set_grad_enabled<span class="token punctuation">(</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 设置梯度计算为禁用状态</span>
-                loss_sum <span class="token operator">=</span> <span class="token number">0.0</span>  <span class="token comment" spellcheck="true"># 总损失值</span>
-                <span class="token keyword">for</span> local_keys<span class="token punctuation">,</span> local_pos <span class="token keyword">in</span> data_gen<span class="token punctuation">:</span>
-                    local_keys<span class="token punctuation">,</span> local_pos <span class="token operator">=</span> local_keys<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span><span class="token punctuation">,</span> local_pos<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span>
-                    outputs <span class="token operator">=</span> model<span class="token punctuation">(</span>local_keys<span class="token punctuation">)</span>
-                    loss <span class="token operator">=</span> criterion<span class="token punctuation">(</span>outputs<span class="token punctuation">,</span> local_pos<span class="token punctuation">)</span>
-                    loss_sum <span class="token operator">+=</span> loss<span class="token punctuation">.</span>item<span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-                <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Loss:"</span><span class="token punctuation">,</span> loss_sum <span class="token operator">/</span> len<span class="token punctuation">(</span>ds<span class="token punctuation">[</span>stage_index<span class="token punctuation">]</span><span class="token punctuation">[</span>model_index<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 打印总平均损失值</span>
-                error_mean<span class="token punctuation">[</span>epoch<span class="token punctuation">]</span> <span class="token operator">=</span> loss_sum <span class="token operator">/</span> len<span class="token punctuation">(</span>ds<span class="token punctuation">[</span>stage_index<span class="token punctuation">]</span><span class="token punctuation">[</span>model_index<span class="token punctuation">]</span><span class="token punctuation">)</span>
-                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>loss_sum <span class="token operator">-</span> last_loss<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">or</span> <span class="token punctuation">(</span>abs<span class="token punctuation">(</span>last_loss <span class="token operator">-</span> loss_sum<span class="token punctuation">)</span> <span class="token operator">/</span> last_loss <span class="token operator">&lt;</span> <span class="token number">0.001</span><span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token comment" spellcheck="true"># 如果后一次比前一次大或者两次迭代比率小于lr均停止迭代</span>
-                    <span class="token keyword">break</span>
-                <span class="token keyword">else</span><span class="token punctuation">:</span>
-                    last_loss <span class="token operator">=</span> loss_sum   <span class="token comment" spellcheck="true"># 更新loss</span>
-
-        <span class="token comment" spellcheck="true"># 绘制各阶段各模型的损失函数图</span>
-        <span class="token comment" spellcheck="true"># axs[stage_index, model_index].plot(error_mean.keys(), error_mean.values())</span>
-        <span class="token comment" spellcheck="true"># axs[stage_index, model_index].set_title("Loss of S&amp;#123;&amp;#125;,M&amp;#123;&amp;#125;".format(stage_index, model_index))</span>
-        plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>error_mean<span class="token punctuation">.</span>keys<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> error_mean<span class="token punctuation">.</span>values<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-        plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">"Loss of Stage_&amp;#123;&amp;#125;,Model_&amp;#123;&amp;#125;"</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span>stage_index<span class="token punctuation">,</span> model_index<span class="token punctuation">)</span><span class="token punctuation">)</span>
-        plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-        models<span class="token punctuation">[</span>stage_index<span class="token punctuation">]</span><span class="token punctuation">.</span>append<span class="token punctuation">(</span>model<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 将训练好的模型添加到模型树中</span>
-
-        <span class="token comment" spellcheck="true"># 开始上层 Model 向下层 Model 分发数据集</span>
-        <span class="token keyword">if</span> stage_index <span class="token operator">!=</span> stage_nums <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 若还不是最后一个阶段</span>
-            <span class="token comment" spellcheck="true"># 根据当前阶段和模型的索引，从数据集中加载样本</span>
-            data_gen <span class="token operator">=</span> torch_data<span class="token punctuation">.</span>DataLoader<span class="token punctuation">(</span>ds<span class="token punctuation">[</span>stage_index<span class="token punctuation">]</span><span class="token punctuation">[</span>model_index<span class="token punctuation">]</span><span class="token punctuation">,</span> batch_size<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> shuffle<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
-            <span class="token keyword">for</span> local_keys<span class="token punctuation">,</span> local_pos <span class="token keyword">in</span> data_gen<span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 遍历数据加载器中的每个样本</span>
-                local_keys<span class="token punctuation">,</span> local_pos <span class="token operator">=</span> local_keys<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span><span class="token punctuation">,</span> local_pos<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span>
-
-                <span class="token comment" spellcheck="true"># 计算下一阶段应该分配给哪个模型: 使用当前模型对当前样本的输出值进行处理，</span>
-                <span class="token comment" spellcheck="true"># 根据输出值、下一阶段模型的数量和最大位置来计算模型的选择</span>
-                output <span class="token operator">=</span> model<span class="token punctuation">(</span>local_keys<span class="token punctuation">)</span>
-                <span class="token comment" spellcheck="true"># 预测的pos*下一个阶段模型总数/最大的pos--->下取整</span>
-                model_select <span class="token operator">=</span> int<span class="token punctuation">(</span>output<span class="token punctuation">.</span>item<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> model_nums<span class="token punctuation">[</span>stage_index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">/</span> max_pos<span class="token punctuation">)</span>
-                <span class="token keyword">if</span> model_select <span class="token operator">>=</span> model_nums<span class="token punctuation">[</span>stage_index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 超过上限取上限</span>
-                    model_select <span class="token operator">=</span> model_nums<span class="token punctuation">[</span>stage_index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token number">1</span>
-                <span class="token keyword">elif</span> model_select <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 小于下限取下限</span>
-                    model_select <span class="token operator">=</span> <span class="token number">0</span>
-                
-                <span class="token comment" spellcheck="true"># 根据模型的选择，将当前样本添加到对应的数据集中</span>
-                next_key<span class="token punctuation">[</span>model_select<span class="token punctuation">]</span><span class="token punctuation">.</span>append<span class="token punctuation">(</span>local_keys<span class="token punctuation">)</span>
-                next_pos<span class="token punctuation">[</span>model_select<span class="token punctuation">]</span><span class="token punctuation">.</span>append<span class="token punctuation">(</span>local_pos<span class="token punctuation">)</span>
-
-    <span class="token comment" spellcheck="true"># 为下一个阶段创建对应数据集</span>
-    <span class="token keyword">if</span> stage_index <span class="token operator">!=</span> stage_nums <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">:</span>
-        ds<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 扩容---增加一行</span>
-        <span class="token keyword">for</span> next_model_index <span class="token keyword">in</span> range<span class="token punctuation">(</span>model_nums<span class="token punctuation">[</span>stage_index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-            ds<span class="token punctuation">[</span>stage_index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>append<span class="token punctuation">(</span>Dataset<span class="token punctuation">(</span>next_key<span class="token punctuation">[</span>next_model_index<span class="token punctuation">]</span><span class="token punctuation">,</span> next_pos<span class="token punctuation">[</span>next_model_index<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 将对应数据集加载进去</span>
-</code></pre>
-<h3 id="训练结果"><a href="#训练结果" class="headerlink" title="训练结果"></a>训练结果</h3><table>
+<h3 id="训练结果"><a href="#训练结果" class="headerlink" title="训练结果"></a>训练结果</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>Stage=1, Model=0, 训练集: 1256 个样本<br>Epoch 0<br>Loss: 27719.089567731142<br>……<br>Epoch 96<br>Loss: 1.5727592304254034<br>Epoch 97<br>Loss: 1.5714545656161703</th>
 <th>Stage=1, Model=1, 训练集: 1263 个样本<br>Epoch 0<br>Loss: 42152.201207442595<br>……<br>Epoch 134<br>Loss: 4.268974411421509<br>Epoch 135<br>Loss: 4.265463400906452</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAMAAABOo35HAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAC9UExURVlZWdPT07KysmRkZIWFhfT09JmZmWZmZm9vb39/fxkZGUxMTDMzM3p6epCQkKamppubm729venp6cjIyN7e3tbW1s/Pz8LCwnx8fLS0tFZWVoiIiI+Pj6GhoeTk5Glpabu7u93d3evr66CgoJSUlKqqqsnJyeDg4Hd3d8PDw+Xl5bi4uNHR0dvb26Ojo6urq+fn51hYWDg4OCgoKHBwcK2traenp0FBQe7u7vHx8U5OTre3t8zMzHV1df///7GrnpQAAAA/dFJOU///////////////////////////////////////////////////////////////////////////////////AI4mfBcAAAUGSURBVHja7NoJb6M4GMZxY0NCD64kve/pMZ2d3Z297+X7f6zFNmBAMUXa6URl/q9UJSWPUPzrizFWRUlNLgEBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYYIEFAVhggQUWWGBBABZYYIEFFlgQgAUWWGCBBRYEYIEFFlhggQUBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYn6cCIcRXgvX/h9qcIVBqDdbEM8RCxGCB9QqXYRwHYDHBgwXWl8eKZKiESHI3Ba1kWs3fKixcaJUl1YyeBm7Ocq+yLItUiVBGnXxenSHJolIKEcwHq6ikbOX1YGVzQCTN8LPmSLreghUl9sN4Uw7yajMrLC0TZ1ImzqY6FEop0+pIaEN5HaoOxVuwEqFyc4I46uSlzOLqgxlh6UaR9l3VYWl9Fdoxb1Q90KJtu41pwwFW/WHhTtW8i7TafLCqRsk6bsGw63L9qurXRmuIlbT9lDQnlXU+nBFW1Q2qnZbDprWa2tjR90LZFqx1/+Td/HpGWLlrLDvIwTcx6dQ1Vrntbig68cDms3JwbA5Y1azs1ger6sNV/bbIw1jU81MvNAGrl58RVn8ozW+btF08iGFoAlYvP3csfVur1gJBEIA1uBmue5dhZDOyO2epbmgCVi8/I6x0MMHH9pjsTfBhNzQBq5uPZoQlB0uH3DZG4EZqQ26fL3sZq5uf09Ih6qw3i/pm6BZO0qZX7rrUS68Xsbr5ZE4rePMk08pk9aUZugfqppvs6AM1Acvlo/StP+6EbW06z8hJqxbYp2BZPQUnFsLsKuhQdaHqn5ewbF7KXIn0jWO5MqOQ7RaNLPtbNMmmhimj0GUmYLl8Gs0Lq4wyPbTu1l2QKqHSouzs3OlDIslW5SQsnY/NXmFplyNvEuuLV/Tau9BzwiraDUSwXmysztYWWNtL1psXeumgIrDGaqXvBfUuvtqUYI3V2t1wk1e2msFluJJm6zDJXv/fIfjPP7DAAgsssCiwwAILLLDAosACCyywwAKLAgsssMACC6zt9fDz/v75tyOB+98PD2+ORgKffjw4OP1uJPDxl+Xy8v1I4MPF3t7VNyOB4/vF4uzdzrG+39f1kz/w66Guv/yBvw90KX/gZKkr8Qf+2dOV+gNHC12/7RxrabD2/a31bLAO/a11YbAO/K21MFhLf2s9Gqw9f2vdGqzFu11jnVusE2/gxmI9eQOnFuvYG7i0WH7uK4t15w2cWazrXWP9a7H8f/bQYvm/6IPF+sF/pVssf19Ii/WH/0K2WH/uGuvEWC39gSdj9Twy+Rqri5EZx1gt/IE7Y/XoD1wbq9vd3w1PlufnD2OBp+ebm/uxwPHF6emnscDR4vLy41jg7vHq6sNY4Pr27OyYdRaLUrDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssL6u+k+AAQCR9eHtLKvLfwAAAABJRU5ErkJggg==" data-original="/posts/image-20240412225034325.png" alt="img"></td>
 <td><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAMAAABOo35HAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAC9UExURVlZWdPT07KysmRkZIWFhfT09JmZmWZmZm9vb39/fxkZGUxMTDMzM3p6epCQkKamppubm729venp6cjIyN7e3tbW1s/Pz8LCwnx8fLS0tFZWVoiIiI+Pj6GhoeTk5Glpabu7u93d3evr66CgoJSUlKqqqsnJyeDg4Hd3d8PDw+Xl5bi4uNHR0dvb26Ojo6urq+fn51hYWDg4OCgoKHBwcK2traenp0FBQe7u7vHx8U5OTre3t8zMzHV1df///7GrnpQAAAA/dFJOU///////////////////////////////////////////////////////////////////////////////////AI4mfBcAAAUGSURBVHja7NoJb6M4GMZxY0NCD64kve/pMZ2d3Z297+X7f6zFNmBAMUXa6URl/q9UJSWPUPzrizFWRUlNLgEBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYYIEFAVhggQUWWGBBABZYYIEFFlgQgAUWWGCBBRYEYIEFFlhggQUBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYn6cCIcRXgvX/h9qcIVBqDdbEM8RCxGCB9QqXYRwHYDHBgwXWl8eKZKiESHI3Ba1kWs3fKixcaJUl1YyeBm7Ocq+yLItUiVBGnXxenSHJolIKEcwHq6ikbOX1YGVzQCTN8LPmSLreghUl9sN4Uw7yajMrLC0TZ1ImzqY6FEop0+pIaEN5HaoOxVuwEqFyc4I46uSlzOLqgxlh6UaR9l3VYWl9Fdoxb1Q90KJtu41pwwFW/WHhTtW8i7TafLCqRsk6bsGw63L9qurXRmuIlbT9lDQnlXU+nBFW1Q2qnZbDprWa2tjR90LZFqx1/+Td/HpGWLlrLDvIwTcx6dQ1Vrntbig68cDms3JwbA5Y1azs1ger6sNV/bbIw1jU81MvNAGrl58RVn8ozW+btF08iGFoAlYvP3csfVur1gJBEIA1uBmue5dhZDOyO2epbmgCVi8/I6x0MMHH9pjsTfBhNzQBq5uPZoQlB0uH3DZG4EZqQ26fL3sZq5uf09Ih6qw3i/pm6BZO0qZX7rrUS68Xsbr5ZE4rePMk08pk9aUZugfqppvs6AM1Acvlo/StP+6EbW06z8hJqxbYp2BZPQUnFsLsKuhQdaHqn5ewbF7KXIn0jWO5MqOQ7RaNLPtbNMmmhimj0GUmYLl8Gs0Lq4wyPbTu1l2QKqHSouzs3OlDIslW5SQsnY/NXmFplyNvEuuLV/Tau9BzwiraDUSwXmysztYWWNtL1psXeumgIrDGaqXvBfUuvtqUYI3V2t1wk1e2msFluJJm6zDJXv/fIfjPP7DAAgsssCiwwAILLLDAosACCyywwAKLAgsssMACC6zt9fDz/v75tyOB+98PD2+ORgKffjw4OP1uJPDxl+Xy8v1I4MPF3t7VNyOB4/vF4uzdzrG+39f1kz/w66Guv/yBvw90KX/gZKkr8Qf+2dOV+gNHC12/7RxrabD2/a31bLAO/a11YbAO/K21MFhLf2s9Gqw9f2vdGqzFu11jnVusE2/gxmI9eQOnFuvYG7i0WH7uK4t15w2cWazrXWP9a7H8f/bQYvm/6IPF+sF/pVssf19Ii/WH/0K2WH/uGuvEWC39gSdj9Twy+Rqri5EZx1gt/IE7Y/XoD1wbq9vd3w1PlufnD2OBp+ebm/uxwPHF6emnscDR4vLy41jg7vHq6sNY4Pr27OyYdRaLUrDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssL6u+k+AAQCR9eHtLKvLfwAAAABJRU5ErkJggg==" data-original="/posts/image-20240412225045243.png" alt="img"></td>
 </tr>
@@ -1371,36 +1372,37 @@ stage_nums <span class="token operator">=</span> len<span class="token punctuati
 <td><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAMAAABOo35HAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAC9UExURVlZWdPT07KysmRkZIWFhfT09JmZmWZmZm9vb39/fxkZGUxMTDMzM3p6epCQkKamppubm729venp6cjIyN7e3tbW1s/Pz8LCwnx8fLS0tFZWVoiIiI+Pj6GhoeTk5Glpabu7u93d3evr66CgoJSUlKqqqsnJyeDg4Hd3d8PDw+Xl5bi4uNHR0dvb26Ojo6urq+fn51hYWDg4OCgoKHBwcK2traenp0FBQe7u7vHx8U5OTre3t8zMzHV1df///7GrnpQAAAA/dFJOU///////////////////////////////////////////////////////////////////////////////////AI4mfBcAAAUGSURBVHja7NoJb6M4GMZxY0NCD64kve/pMZ2d3Z297+X7f6zFNmBAMUXa6URl/q9UJSWPUPzrizFWRUlNLgEBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYYIEFAVhggQUWWGBBABZYYIEFFlgQgAUWWGCBBRYEYIEFFlhggQUBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYn6cCIcRXgvX/h9qcIVBqDdbEM8RCxGCB9QqXYRwHYDHBgwXWl8eKZKiESHI3Ba1kWs3fKixcaJUl1YyeBm7Ocq+yLItUiVBGnXxenSHJolIKEcwHq6ikbOX1YGVzQCTN8LPmSLreghUl9sN4Uw7yajMrLC0TZ1ImzqY6FEop0+pIaEN5HaoOxVuwEqFyc4I46uSlzOLqgxlh6UaR9l3VYWl9Fdoxb1Q90KJtu41pwwFW/WHhTtW8i7TafLCqRsk6bsGw63L9qurXRmuIlbT9lDQnlXU+nBFW1Q2qnZbDprWa2tjR90LZFqx1/+Td/HpGWLlrLDvIwTcx6dQ1Vrntbig68cDms3JwbA5Y1azs1ger6sNV/bbIw1jU81MvNAGrl58RVn8ozW+btF08iGFoAlYvP3csfVur1gJBEIA1uBmue5dhZDOyO2epbmgCVi8/I6x0MMHH9pjsTfBhNzQBq5uPZoQlB0uH3DZG4EZqQ26fL3sZq5uf09Ih6qw3i/pm6BZO0qZX7rrUS68Xsbr5ZE4rePMk08pk9aUZugfqppvs6AM1Acvlo/StP+6EbW06z8hJqxbYp2BZPQUnFsLsKuhQdaHqn5ewbF7KXIn0jWO5MqOQ7RaNLPtbNMmmhimj0GUmYLl8Gs0Lq4wyPbTu1l2QKqHSouzs3OlDIslW5SQsnY/NXmFplyNvEuuLV/Tau9BzwiraDUSwXmysztYWWNtL1psXeumgIrDGaqXvBfUuvtqUYI3V2t1wk1e2msFluJJm6zDJXv/fIfjPP7DAAgsssCiwwAILLLDAosACCyywwAKLAgsssMACC6zt9fDz/v75tyOB+98PD2+ORgKffjw4OP1uJPDxl+Xy8v1I4MPF3t7VNyOB4/vF4uzdzrG+39f1kz/w66Guv/yBvw90KX/gZKkr8Qf+2dOV+gNHC12/7RxrabD2/a31bLAO/a11YbAO/K21MFhLf2s9Gqw9f2vdGqzFu11jnVusE2/gxmI9eQOnFuvYG7i0WH7uK4t15w2cWazrXWP9a7H8f/bQYvm/6IPF+sF/pVssf19Ii/WH/0K2WH/uGuvEWC39gSdj9Twy+Rqri5EZx1gt/IE7Y/XoD1wbq9vd3w1PlufnD2OBp+ebm/uxwPHF6emnscDR4vLy41jg7vHq6sNY4Pr27OyYdRaLUrDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssL6u+k+AAQCR9eHtLKvLfwAAAABJRU5ErkJggg==" data-original="/posts/image-20240412225118146.png" alt="img"></td>
 <td><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAMAAABOo35HAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAC9UExURVlZWdPT07KysmRkZIWFhfT09JmZmWZmZm9vb39/fxkZGUxMTDMzM3p6epCQkKamppubm729venp6cjIyN7e3tbW1s/Pz8LCwnx8fLS0tFZWVoiIiI+Pj6GhoeTk5Glpabu7u93d3evr66CgoJSUlKqqqsnJyeDg4Hd3d8PDw+Xl5bi4uNHR0dvb26Ojo6urq+fn51hYWDg4OCgoKHBwcK2traenp0FBQe7u7vHx8U5OTre3t8zMzHV1df///7GrnpQAAAA/dFJOU///////////////////////////////////////////////////////////////////////////////////AI4mfBcAAAUGSURBVHja7NoJb6M4GMZxY0NCD64kve/pMZ2d3Z297+X7f6zFNmBAMUXa6URl/q9UJSWPUPzrizFWRUlNLgEBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYYIEFAVhggQUWWGBBABZYYIEFFlgQgAUWWGCBBRYEYIEFFlhggQUBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYn6cCIcRXgvX/h9qcIVBqDdbEM8RCxGCB9QqXYRwHYDHBgwXWl8eKZKiESHI3Ba1kWs3fKixcaJUl1YyeBm7Ocq+yLItUiVBGnXxenSHJolIKEcwHq6ikbOX1YGVzQCTN8LPmSLreghUl9sN4Uw7yajMrLC0TZ1ImzqY6FEop0+pIaEN5HaoOxVuwEqFyc4I46uSlzOLqgxlh6UaR9l3VYWl9Fdoxb1Q90KJtu41pwwFW/WHhTtW8i7TafLCqRsk6bsGw63L9qurXRmuIlbT9lDQnlXU+nBFW1Q2qnZbDprWa2tjR90LZFqx1/+Td/HpGWLlrLDvIwTcx6dQ1Vrntbig68cDms3JwbA5Y1azs1ger6sNV/bbIw1jU81MvNAGrl58RVn8ozW+btF08iGFoAlYvP3csfVur1gJBEIA1uBmue5dhZDOyO2epbmgCVi8/I6x0MMHH9pjsTfBhNzQBq5uPZoQlB0uH3DZG4EZqQ26fL3sZq5uf09Ih6qw3i/pm6BZO0qZX7rrUS68Xsbr5ZE4rePMk08pk9aUZugfqppvs6AM1Acvlo/StP+6EbW06z8hJqxbYp2BZPQUnFsLsKuhQdaHqn5ewbF7KXIn0jWO5MqOQ7RaNLPtbNMmmhimj0GUmYLl8Gs0Lq4wyPbTu1l2QKqHSouzs3OlDIslW5SQsnY/NXmFplyNvEuuLV/Tau9BzwiraDUSwXmysztYWWNtL1psXeumgIrDGaqXvBfUuvtqUYI3V2t1wk1e2msFluJJm6zDJXv/fIfjPP7DAAgsssCiwwAILLLDAosACCyywwAKLAgsssMACC6zt9fDz/v75tyOB+98PD2+ORgKffjw4OP1uJPDxl+Xy8v1I4MPF3t7VNyOB4/vF4uzdzrG+39f1kz/w66Guv/yBvw90KX/gZKkr8Qf+2dOV+gNHC12/7RxrabD2/a31bLAO/a11YbAO/K21MFhLf2s9Gqw9f2vdGqzFu11jnVusE2/gxmI9eQOnFuvYG7i0WH7uK4t15w2cWazrXWP9a7H8f/bQYvm/6IPF+sF/pVssf19Ii/WH/0K2WH/uGuvEWC39gSdj9Twy+Rqri5EZx1gt/IE7Y/XoD1wbq9vd3w1PlufnD2OBp+ebm/uxwPHF6emnscDR4vLy41jg7vHq6sNY4Pr27OyYdRaLUrDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssL6u+k+AAQCR9eHtLKvLfwAAAABJRU5ErkJggg==" data-original="/posts/image-20240412225123070.png" alt="img"></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <hr>
-<h3 id="模型测试"><a href="#模型测试" class="headerlink" title="模型测试"></a>模型测试</h3><pre class=" language-python"><code class="language-python">test_ds <span class="token operator">=</span> Dataset<span class="token punctuation">(</span>keys<span class="token punctuation">,</span> pos<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 创建数据集 test_ds</span>
+<h3 id="模型测试"><a href="#模型测试" class="headerlink" title="模型测试"></a>模型测试</h3><pre class=" language-lang-python"><code class="language-lang-python">test_ds = Dataset(keys, pos)  # 创建数据集 test_ds
 
-<span class="token comment" spellcheck="true"># 创建数据加载器 test_gen，每次只加载一个样本</span>
-test_gen <span class="token operator">=</span> torch_data<span class="token punctuation">.</span>DataLoader<span class="token punctuation">(</span>test_ds<span class="token punctuation">,</span> batch_size<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> shuffle<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
-err_sum <span class="token operator">=</span> <span class="token number">0</span>  <span class="token comment" spellcheck="true"># 模型树总的 error</span>
-<span class="token keyword">for</span> local_keys<span class="token punctuation">,</span> local_pos <span class="token keyword">in</span> test_gen<span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 遍历 数据加载器</span>
-    local_keys<span class="token punctuation">,</span> local_pos <span class="token operator">=</span> local_keys<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span><span class="token punctuation">,</span> local_pos<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span>
-    model_select <span class="token operator">=</span> <span class="token number">0</span>  <span class="token comment" spellcheck="true"># 默认选择模型0</span>
-    <span class="token keyword">for</span> stage_index <span class="token keyword">in</span> range<span class="token punctuation">(</span>stage_nums<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        model <span class="token operator">=</span> models<span class="token punctuation">[</span>stage_index<span class="token punctuation">]</span><span class="token punctuation">[</span>model_select<span class="token punctuation">]</span>  <span class="token comment" spellcheck="true"># 当前阶段下的模型</span>
-        output <span class="token operator">=</span> model<span class="token punctuation">(</span>local_keys<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 计算当前模型的输出</span>
-        
-        <span class="token keyword">if</span> stage_index <span class="token operator">!=</span> stage_nums <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 如果不是最后一个阶段</span>
-            <span class="token comment" spellcheck="true"># 根据输出值、下一阶段模型的数量和最大位置来计算模型的选择</span>
-            model_select <span class="token operator">=</span> int<span class="token punctuation">(</span>output<span class="token punctuation">.</span>item<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> model_nums<span class="token punctuation">[</span>stage_index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">/</span> max_pos<span class="token punctuation">)</span>
-            <span class="token keyword">if</span> model_select <span class="token operator">>=</span> model_nums<span class="token punctuation">[</span>stage_index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 超过上限取上限</span>
-                model_select <span class="token operator">=</span> model_nums<span class="token punctuation">[</span>stage_index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token number">1</span>
-            <span class="token keyword">elif</span> model_select <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">:</span>  <span class="token comment" spellcheck="true"># 小于下限取下限</span>
-                model_select <span class="token operator">=</span> <span class="token number">0</span>
-        <span class="token keyword">else</span><span class="token punctuation">:</span>
-            <span class="token comment" spellcheck="true"># 分别获取 output 和 pos 张量中的标量值,然后转换为整数类型计算它们的差值</span>
-            err_sum <span class="token operator">+=</span> abs<span class="token punctuation">(</span>int<span class="token punctuation">(</span>output<span class="token punctuation">.</span>item<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> int<span class="token punctuation">(</span>local_pos<span class="token punctuation">.</span>item<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 最后一个阶段,累加预测值-真实值</span>
+# 创建数据加载器 test_gen，每次只加载一个样本
+test_gen = torch_data.DataLoader(test_ds, batch_size=1, shuffle=False)
+err_sum = 0  # 模型树总的 error
+for local_keys, local_pos in test_gen:  # 遍历 数据加载器
+    local_keys, local_pos = local_keys.to(device), local_pos.to(device)
+    model_select = 0  # 默认选择模型0
+    for stage_index in range(stage_nums):
+        model = models[stage_index][model_select]  # 当前阶段下的模型
+        output = model(local_keys)  # 计算当前模型的输出
 
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Final Loss:"</span><span class="token punctuation">,</span> float<span class="token punctuation">(</span>err_sum<span class="token punctuation">)</span> <span class="token operator">/</span> len<span class="token punctuation">(</span>test_ds<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 输出总的误差均值</span>
+        if stage_index != stage_nums - 1:  # 如果不是最后一个阶段
+            # 根据输出值、下一阶段模型的数量和最大位置来计算模型的选择
+            model_select = int(output.item() * model_nums[stage_index + 1] / max_pos)
+            if model_select >= model_nums[stage_index + 1]:  # 超过上限取上限
+                model_select = model_nums[stage_index + 1] - 1
+            elif model_select <= 0:  # 小于下限取下限
+                model_select = 0
+        else:
+            # 分别获取 output 和 pos 张量中的标量值,然后转换为整数类型计算它们的差值
+            err_sum += abs(int(output.item()) - int(local_pos.item()))  # 最后一个阶段,累加预测值-真实值
+
+print("Final Loss:", float(err_sum) / len(test_ds))  # 输出总的误差均值
 </code></pre>
 <pre><code>Final Loss: 11.5413
-</code></pre>
-<h2 id="改进策略"><a href="#改进策略" class="headerlink" title="改进策略"></a>改进策略</h2><p>这里运用了全连接层的BP进行简单地回归预测，亦可以根据具体实例采用适当的回归算法进行拟合，以提高精度；或者再增加一层，适当扩大每层的模型数，但这样会增加训练时间，需要折中感觉。这里仅仅是索引的训练，即构建索引，至于增，删等操作对索引带来的影响导致索引如何变更需要进一步研读论文掌握其思想加以认真思考得出。对于多维索引的构建可以结合Z-order，即目前我所研究的那篇Blinkhash就是在分布式环境下整合突破了hash索引与B+树索引的深度融合，解决时序数据最右节点热争抢问题，但其构建的索引也是递增有序的，多维数据可以用z-order降为一维，此处应该亦可以和ML相关算法结合来构建索引已解决多维索引问题。</p>
+</code></pre><h2 id="改进策略"><a href="#改进策略" class="headerlink" title="改进策略"></a>改进策略</h2><p>这里运用了全连接层的BP进行简单地回归预测，亦可以根据具体实例采用适当的回归算法进行拟合，以提高精度；或者再增加一层，适当扩大每层的模型数，但这样会增加训练时间，需要折中感觉。这里仅仅是索引的训练，即构建索引，至于增，删等操作对索引带来的影响导致索引如何变更需要进一步研读论文掌握其思想加以认真思考得出。对于多维索引的构建可以结合Z-order，即目前我所研究的那篇Blinkhash就是在分布式环境下整合突破了hash索引与B+树索引的深度融合，解决时序数据最右节点热争抢问题，但其构建的索引也是递增有序的，多维数据可以用z-order降为一维，此处应该亦可以和ML相关算法结合来构建索引已解决多维索引问题。</p>
 <hr>
 
                                     
@@ -2076,7 +2078,7 @@ err_sum <span class="token operator">=</span> <span class="token number">0</span
                                             
                                                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                                     class="white-color">
-                                                    50.4k
+                                                    49.6k
                                                 </span>&nbsp;字
                                                 
                                                     

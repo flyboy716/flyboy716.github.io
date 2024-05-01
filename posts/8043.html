@@ -1303,7 +1303,7 @@
 <p>请注意，这种情况并非常见的机器学习研究场景：<strong>在这种特定情况下，训练数据同时也是测试数据</strong>。因为对于索引结构而言，它只需要处理我们已经加入索引中的数据，因此，当我们构建预测模型时，我们就已经拥有了它必须处理的所有数据。</p>
 <p>对于机器学习人员而言，从某些方面来看这是一个好消息，因为现在我们不必担心过拟合问题，并且 <strong>实际上我们的目标正是过拟合</strong>：我们要使模型完全拟合所拥有的数据，而并非去考虑一些可能会出现的假设数据。</p>
 <p>虽然，对于这类 <strong>只读内存数据库 (Read-only In-memory Databases)</strong> 而言，以上观点是正确的。但实际上，对于具有大量写工作负载或者只要涉及到写操作的数据库而言，这是一个巨大的问题。因为每当有新数据输入时，我们都有可能需要重新训练整个模型，而这显然是有问题的。因此，这是一个有待进一步研究的方向，作者在论文中并未尝试解决这方面的问题。</p>
-<p>重点是，我们必须为每条记录，或者说训练机器学习模型所用到的整个数据集，存储最小误差和最大误差。然后，我们将得到一个 **有界问题 (Bounded Problem)**。因此，我们首先得到所要查找的记录在内存中的大概位置，然后只需要在基础数据库中使用二分查找或者其他搜索算法来查找我们感兴趣的记录即可，作者在论文中还提到了一些其他的搜索策略，但是通常而言，二分查找是最强大的。</p>
+<p>重点是，我们必须为每条记录，或者说训练机器学习模型所用到的整个数据集，存储最小误差和最大误差。然后，我们将得到一个 <strong>有界问题 (Bounded Problem)</strong>。因此，我们首先得到所要查找的记录在内存中的大概位置，然后只需要在基础数据库中使用二分查找或者其他搜索算法来查找我们感兴趣的记录即可，作者在论文中还提到了一些其他的搜索策略，但是通常而言，二分查找是最强大的。</p>
 <p><strong>过拟合和仅建立一个完整索引有什么区别，这对于不在完整索引中的新数据有帮助吗？</strong></p>
 <p>论文中对于第二个问题的答案尚不清楚，因为作者并没有尝试过考虑哪些数据可能会加入索引。因此，如果我们有一个完全过拟合的机器学习模型，即模型已经完全记住了训练数据，那么它将是一个完美且完整的索引。作者在论文中进行了一些相关尝试，目前来看，与经典索引结构相比，学习索引至少在时间框架上具有一定的竞争力。</p>
 <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAMAAABOo35HAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAC9UExURVlZWdPT07KysmRkZIWFhfT09JmZmWZmZm9vb39/fxkZGUxMTDMzM3p6epCQkKamppubm729venp6cjIyN7e3tbW1s/Pz8LCwnx8fLS0tFZWVoiIiI+Pj6GhoeTk5Glpabu7u93d3evr66CgoJSUlKqqqsnJyeDg4Hd3d8PDw+Xl5bi4uNHR0dvb26Ojo6urq+fn51hYWDg4OCgoKHBwcK2traenp0FBQe7u7vHx8U5OTre3t8zMzHV1df///7GrnpQAAAA/dFJOU///////////////////////////////////////////////////////////////////////////////////AI4mfBcAAAUGSURBVHja7NoJb6M4GMZxY0NCD64kve/pMZ2d3Z297+X7f6zFNmBAMUXa6URl/q9UJSWPUPzrizFWRUlNLgEBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYYIEFAVhggQUWWGBBABZYYIEFFlgQgAUWWGCBBRYEYIEFFlhggQUBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYn6cCIcRXgvX/h9qcIVBqDdbEM8RCxGCB9QqXYRwHYDHBgwXWl8eKZKiESHI3Ba1kWs3fKixcaJUl1YyeBm7Ocq+yLItUiVBGnXxenSHJolIKEcwHq6ikbOX1YGVzQCTN8LPmSLreghUl9sN4Uw7yajMrLC0TZ1ImzqY6FEop0+pIaEN5HaoOxVuwEqFyc4I46uSlzOLqgxlh6UaR9l3VYWl9Fdoxb1Q90KJtu41pwwFW/WHhTtW8i7TafLCqRsk6bsGw63L9qurXRmuIlbT9lDQnlXU+nBFW1Q2qnZbDprWa2tjR90LZFqx1/+Td/HpGWLlrLDvIwTcx6dQ1Vrntbig68cDms3JwbA5Y1azs1ger6sNV/bbIw1jU81MvNAGrl58RVn8ozW+btF08iGFoAlYvP3csfVur1gJBEIA1uBmue5dhZDOyO2epbmgCVi8/I6x0MMHH9pjsTfBhNzQBq5uPZoQlB0uH3DZG4EZqQ26fL3sZq5uf09Ih6qw3i/pm6BZO0qZX7rrUS68Xsbr5ZE4rePMk08pk9aUZugfqppvs6AM1Acvlo/StP+6EbW06z8hJqxbYp2BZPQUnFsLsKuhQdaHqn5ewbF7KXIn0jWO5MqOQ7RaNLPtbNMmmhimj0GUmYLl8Gs0Lq4wyPbTu1l2QKqHSouzs3OlDIslW5SQsnY/NXmFplyNvEuuLV/Tau9BzwiraDUSwXmysztYWWNtL1psXeumgIrDGaqXvBfUuvtqUYI3V2t1wk1e2msFluJJm6zDJXv/fIfjPP7DAAgsssCiwwAILLLDAosACCyywwAKLAgsssMACC6zt9fDz/v75tyOB+98PD2+ORgKffjw4OP1uJPDxl+Xy8v1I4MPF3t7VNyOB4/vF4uzdzrG+39f1kz/w66Guv/yBvw90KX/gZKkr8Qf+2dOV+gNHC12/7RxrabD2/a31bLAO/a11YbAO/K21MFhLf2s9Gqw9f2vdGqzFu11jnVusE2/gxmI9eQOnFuvYG7i0WH7uK4t15w2cWazrXWP9a7H8f/bQYvm/6IPF+sF/pVssf19Ii/WH/0K2WH/uGuvEWC39gSdj9Twy+Rqri5EZx1gt/IE7Y/XoD1wbq9vd3w1PlufnD2OBp+ebm/uxwPHF6emnscDR4vLy41jg7vHq6sNY4Pr27OyYdRaLUrDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssL6u+k+AAQCR9eHtLKvLfwAAAABJRU5ErkJggg==" data-original="http://andy-blog.oss-cn-beijing.aliyuncs.com/blog/2020-08-27-WX20200828-022149%402x.png" alt="img"></p>
@@ -1341,28 +1341,38 @@
 <li>机器学习模型从本质上考虑了数据的分布，这可以帮助提高索引利用率。</li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p>从某种程度上看，在学习索引中，过拟合是我们的目标：</p>
 <ul>
 <li>索引结构永远不需要预测那些尚未建立索引的数据的位置。</li>
 <li>对索引中的数据进行准确的预测要比泛化到保留数据集上更重要。</li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p>误差边界要比平均误差更重要：</p>
 <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAMAAABOo35HAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAC9UExURVlZWdPT07KysmRkZIWFhfT09JmZmWZmZm9vb39/fxkZGUxMTDMzM3p6epCQkKamppubm729venp6cjIyN7e3tbW1s/Pz8LCwnx8fLS0tFZWVoiIiI+Pj6GhoeTk5Glpabu7u93d3evr66CgoJSUlKqqqsnJyeDg4Hd3d8PDw+Xl5bi4uNHR0dvb26Ojo6urq+fn51hYWDg4OCgoKHBwcK2traenp0FBQe7u7vHx8U5OTre3t8zMzHV1df///7GrnpQAAAA/dFJOU///////////////////////////////////////////////////////////////////////////////////AI4mfBcAAAUGSURBVHja7NoJb6M4GMZxY0NCD64kve/pMZ2d3Z297+X7f6zFNmBAMUXa6URl/q9UJSWPUPzrizFWRUlNLgEBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYYIEFAVhggQUWWGBBABZYYIEFFlgQgAUWWGCBBRYEYIEFFlhggQUBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYn6cCIcRXgvX/h9qcIVBqDdbEM8RCxGCB9QqXYRwHYDHBgwXWl8eKZKiESHI3Ba1kWs3fKixcaJUl1YyeBm7Ocq+yLItUiVBGnXxenSHJolIKEcwHq6ikbOX1YGVzQCTN8LPmSLreghUl9sN4Uw7yajMrLC0TZ1ImzqY6FEop0+pIaEN5HaoOxVuwEqFyc4I46uSlzOLqgxlh6UaR9l3VYWl9Fdoxb1Q90KJtu41pwwFW/WHhTtW8i7TafLCqRsk6bsGw63L9qurXRmuIlbT9lDQnlXU+nBFW1Q2qnZbDprWa2tjR90LZFqx1/+Td/HpGWLlrLDvIwTcx6dQ1Vrntbig68cDms3JwbA5Y1azs1ger6sNV/bbIw1jU81MvNAGrl58RVn8ozW+btF08iGFoAlYvP3csfVur1gJBEIA1uBmue5dhZDOyO2epbmgCVi8/I6x0MMHH9pjsTfBhNzQBq5uPZoQlB0uH3DZG4EZqQ26fL3sZq5uf09Ih6qw3i/pm6BZO0qZX7rrUS68Xsbr5ZE4rePMk08pk9aUZugfqppvs6AM1Acvlo/StP+6EbW06z8hJqxbYp2BZPQUnFsLsKuhQdaHqn5ewbF7KXIn0jWO5MqOQ7RaNLPtbNMmmhimj0GUmYLl8Gs0Lq4wyPbTu1l2QKqHSouzs3OlDIslW5SQsnY/NXmFplyNvEuuLV/Tau9BzwiraDUSwXmysztYWWNtL1psXeumgIrDGaqXvBfUuvtqUYI3V2t1wk1e2msFluJJm6zDJXv/fIfjPP7DAAgsssCiwwAILLLDAosACCyywwAKLAgsssMACC6zt9fDz/v75tyOB+98PD2+ORgKffjw4OP1uJPDxl+Xy8v1I4MPF3t7VNyOB4/vF4uzdzrG+39f1kz/w66Guv/yBvw90KX/gZKkr8Qf+2dOV+gNHC12/7RxrabD2/a31bLAO/a11YbAO/K21MFhLf2s9Gqw9f2vdGqzFu11jnVusE2/gxmI9eQOnFuvYG7i0WH7uK4t15w2cWazrXWP9a7H8f/bQYvm/6IPF+sF/pVssf19Ii/WH/0K2WH/uGuvEWC39gSdj9Twy+Rqri5EZx1gt/IE7Y/XoD1wbq9vd3w1PlufnD2OBp+ebm/uxwPHF6emnscDR4vLy41jg7vHq6sNY4Pr27OyYdRaLUrDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssL6u+k+AAQCR9eHtLKvLfwAAAABJRU5ErkJggg==" data-original="http://andy-blog.oss-cn-beijing.aliyuncs.com/blog/2020-08-28-WX20200829-010343%402x.png" alt="img"></p>
 <p>表扫描将在最小误差边界和最大误差边界之间进行，因此，从对查询性能方面的影响考虑，相比如何使得猜测的位置更加准确，实际上我们更加关心的是如何缩小这个误差范围。所以这是另一种有趣的权衡，在一般的机器学习研究中我们通常不必考虑这点，至少并不总是需要将其作为目标，有时我们的目标只是为了使猜测尽可能准确，尤其是对于一般的分类问题而言。</p>
 </li>
+</ul>
+<ul>
 <li><p>关于扩展的有趣特性：</p>
 <ul>
 <li>标准索引结构的大小会随着输入数据的增长而增长。</li>
 <li>机器学习模型的大小不必随数据增长而增长，它只需要足够的复杂度即可生成 N 个值作为输出。</li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p>利用新硬件的优势：</p>
 <ul>
 <li>摩尔定律正在日渐衰亡，传统索引结构并不能很好地适应并行化。</li>
 <li>机器学习工作负载是当前硬件发展的主要驱动力，这意味着学习索引可以更好地利用新硬件的优势。</li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p>多维索引：</p>
 <ul>
 <li>传统索引结构仅考虑某些数据的单个特征。</li>
@@ -2045,7 +2055,7 @@
                                             
                                                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                                     class="white-color">
-                                                    50.4k
+                                                    49.6k
                                                 </span>&nbsp;字
                                                 
                                                     
