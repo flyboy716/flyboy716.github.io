@@ -6,7 +6,7 @@
   <link href="https://flyboy716.github.io/atom.xml" rel="self"/>
   
   <link href="https://flyboy716.github.io/"/>
-  <updated>2024-05-02T13:13:07.633Z</updated>
+  <updated>2024-05-02T14:21:55.905Z</updated>
   <id>https://flyboy716.github.io/</id>
   
   <author>
@@ -17,11 +17,107 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Dabble</title>
+    <title>10-学习型索引-Updatable</title>
+    <link href="https://flyboy716.github.io/posts/72ac.html"/>
+    <id>https://flyboy716.github.io/posts/72ac.html</id>
+    <published>2024-05-02T14:09:24.000Z</published>
+    <updated>2024-05-02T14:21:55.905Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;Updatable-Learned-Indexes-Meet-Disk-Resident-DBMS&quot;&gt;&lt;a href=&quot;#Updatable-Learned-Indexes-Meet-Disk-Resident-DBMS&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="学习型索引" scheme="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/"/>
+    
+    
+    <category term="学习型索引" scheme="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>09-学习型索引-FITing-Tree</title>
+    <link href="https://flyboy716.github.io/posts/9cf2.html"/>
+    <id>https://flyboy716.github.io/posts/9cf2.html</id>
+    <published>2024-05-02T14:09:10.000Z</published>
+    <updated>2024-05-02T14:32:24.518Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;FITing-Tree-A-Data-aware-Index-Structure&quot;&gt;&lt;a href=&quot;#FITing-Tree-A-Data-aware-Index-Structure&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="学习型索引" scheme="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/"/>
+    
+    
+    <category term="学习型索引" scheme="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>06-学习型索引-RadixSpline</title>
+    <link href="https://flyboy716.github.io/posts/0.html"/>
+    <id>https://flyboy716.github.io/posts/0.html</id>
+    <published>2024-05-02T13:52:51.000Z</published>
+    <updated>2024-05-02T14:22:41.052Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;RadixSpline-A-Single-Pass-Learned-Index&quot;&gt;&lt;a href=&quot;#RadixSpline-A-Single-Pass-Learned-Index&quot; class=&quot;headerlink&quot; title=&quot;RadixSpline:</summary>
+        
+      
+    
+    
+    
+    <category term="学习型索引" scheme="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/"/>
+    
+    
+    <category term="学习型索引" scheme="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>05-学习型索引-PGM-index</title>
+    <link href="https://flyboy716.github.io/posts/d9da.html"/>
+    <id>https://flyboy716.github.io/posts/d9da.html</id>
+    <published>2024-05-02T13:52:37.000Z</published>
+    <updated>2024-05-02T14:22:56.248Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;PGM-索引：具有可证明的最坏情况边界的完全动态压缩学习索引&quot;&gt;&lt;a href=&quot;#PGM-索引：具有可证明的最坏情况边界的完全动态压缩学习索引&quot; class=&quot;headerlink&quot; title=&quot;PGM</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>04-学习型索引-Dabble</title>
     <link href="https://flyboy716.github.io/posts/c1e1.html"/>
     <id>https://flyboy716.github.io/posts/c1e1.html</id>
     <published>2024-04-19T12:32:13.000Z</published>
-    <updated>2024-05-02T13:13:07.633Z</updated>
+    <updated>2024-05-02T14:23:11.059Z</updated>
     
     
       
@@ -42,18 +138,18 @@
   </entry>
   
   <entry>
-    <title>LearnedIndex-03</title>
+    <title>01-B树与B+树</title>
     <link href="https://flyboy716.github.io/posts/4082.html"/>
     <id>https://flyboy716.github.io/posts/4082.html</id>
     <published>2024-04-12T15:10:47.000Z</published>
-    <updated>2024-05-02T12:50:56.815Z</updated>
+    <updated>2024-05-02T14:23:50.113Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;数据库中的-B-树与-B-树&quot;&gt;&lt;a href=&quot;#数据库中的-B-树与-B-树&quot; class=&quot;headerlink&quot; title=&quot;数据库中的 B 树与 B+ 树&quot;&gt;&lt;/a&gt;数据库中的 B 树与 B+</summary>
+    <summary type="html">&lt;h2 id=&quot;数据库中的-B-树-与-B-树&quot;&gt;&lt;a href=&quot;#数据库中的-B-树-与-B-树&quot; class=&quot;headerlink&quot; title=&quot;数据库中的 B 树 与 B^+^ 树&quot;&gt;&lt;/a&gt;数据库中的 B 树 与 B^+^ 树&lt;/h2&gt;&lt;p&gt;参考博客：&lt;a</summary>
         
       
     
@@ -67,11 +163,11 @@
   </entry>
   
   <entry>
-    <title>LearnedIndex-02</title>
+    <title>02-哈希与布隆过滤</title>
     <link href="https://flyboy716.github.io/posts/8043.html"/>
     <id>https://flyboy716.github.io/posts/8043.html</id>
     <published>2024-04-12T15:10:26.000Z</published>
-    <updated>2024-05-02T12:50:10.692Z</updated>
+    <updated>2024-05-02T14:23:35.533Z</updated>
     
     
       
@@ -117,11 +213,11 @@
   </entry>
   
   <entry>
-    <title>LearnedIndex</title>
+    <title>03-学习型索引-RMI</title>
     <link href="https://flyboy716.github.io/posts/36c1.html"/>
     <id>https://flyboy716.github.io/posts/36c1.html</id>
     <published>2024-04-12T13:25:41.000Z</published>
-    <updated>2024-05-02T13:00:27.650Z</updated>
+    <updated>2024-05-02T14:23:22.149Z</updated>
     
     
       
@@ -142,11 +238,11 @@
   </entry>
   
   <entry>
-    <title>Alex</title>
+    <title>07-学习型索引-Alex</title>
     <link href="https://flyboy716.github.io/posts/53ff.html"/>
     <id>https://flyboy716.github.io/posts/53ff.html</id>
     <published>2024-04-12T13:15:27.000Z</published>
-    <updated>2024-05-02T13:02:59.395Z</updated>
+    <updated>2024-05-02T14:22:24.345Z</updated>
     
     
       
@@ -167,11 +263,11 @@
   </entry>
   
   <entry>
-    <title>FINEdex</title>
+    <title>08-学习型索引-FINEdex</title>
     <link href="https://flyboy716.github.io/posts/323e.html"/>
     <id>https://flyboy716.github.io/posts/323e.html</id>
     <published>2024-04-12T13:00:13.000Z</published>
-    <updated>2024-05-02T12:51:39.257Z</updated>
+    <updated>2024-05-02T14:22:10.405Z</updated>
     
     
       

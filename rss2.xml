@@ -15,11 +15,115 @@
     <atom:link href="https://flyboy716.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>专注于学习知识,分享生活,分享知识</description>
-    <pubDate>Thu, 02 May 2024 13:13:07 GMT</pubDate>
+    <pubDate>Thu, 02 May 2024 14:21:55 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
-      <title>Dabble</title>
+      <title>10-学习型索引-Updatable</title>
+      <link>https://flyboy716.github.io/posts/72ac.html</link>
+      <guid>https://flyboy716.github.io/posts/72ac.html</guid>
+      <pubDate>Thu, 02 May 2024 14:09:24 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;Updatable-Learned-Indexes-Meet-Disk-Resident-DBMS&quot;&gt;&lt;a href=&quot;#Updatable-Learned-Indexes-Meet-Disk-Resident-DBMS&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      
+      
+      <category domain="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      
+      
+      <comments>https://flyboy716.github.io/posts/72ac.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>09-学习型索引-FITing-Tree</title>
+      <link>https://flyboy716.github.io/posts/9cf2.html</link>
+      <guid>https://flyboy716.github.io/posts/9cf2.html</guid>
+      <pubDate>Thu, 02 May 2024 14:09:10 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;FITing-Tree-A-Data-aware-Index-Structure&quot;&gt;&lt;a href=&quot;#FITing-Tree-A-Data-aware-Index-Structure&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      
+      
+      <category domain="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      
+      
+      <comments>https://flyboy716.github.io/posts/9cf2.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>06-学习型索引-RadixSpline</title>
+      <link>https://flyboy716.github.io/posts/0.html</link>
+      <guid>https://flyboy716.github.io/posts/0.html</guid>
+      <pubDate>Thu, 02 May 2024 13:52:51 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;RadixSpline-A-Single-Pass-Learned-Index&quot;&gt;&lt;a href=&quot;#RadixSpline-A-Single-Pass-Learned-Index&quot; class=&quot;headerlink&quot; title=&quot;RadixSpline:</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://flyboy716.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      
+      
+      <category domain="https://flyboy716.github.io/tags/%E5%AD%A6%E4%B9%A0%E5%9E%8B%E7%B4%A2%E5%BC%95/">学习型索引</category>
+      
+      
+      <comments>https://flyboy716.github.io/posts/0.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>05-学习型索引-PGM-index</title>
+      <link>https://flyboy716.github.io/posts/d9da.html</link>
+      <guid>https://flyboy716.github.io/posts/d9da.html</guid>
+      <pubDate>Thu, 02 May 2024 13:52:37 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;PGM-索引：具有可证明的最坏情况边界的完全动态压缩学习索引&quot;&gt;&lt;a href=&quot;#PGM-索引：具有可证明的最坏情况边界的完全动态压缩学习索引&quot; class=&quot;headerlink&quot; title=&quot;PGM</description>
+          
+        
+      
+      
+      
+      
+      
+      
+      <comments>https://flyboy716.github.io/posts/d9da.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>04-学习型索引-Dabble</title>
       <link>https://flyboy716.github.io/posts/c1e1.html</link>
       <guid>https://flyboy716.github.io/posts/c1e1.html</guid>
       <pubDate>Fri, 19 Apr 2024 12:32:13 GMT</pubDate>
@@ -46,7 +150,7 @@
     </item>
     
     <item>
-      <title>LearnedIndex-03</title>
+      <title>01-B树与B+树</title>
       <link>https://flyboy716.github.io/posts/4082.html</link>
       <guid>https://flyboy716.github.io/posts/4082.html</guid>
       <pubDate>Fri, 12 Apr 2024 15:10:47 GMT</pubDate>
@@ -55,7 +159,7 @@
         
           
           
-      <description>&lt;h1 id=&quot;数据库中的-B-树与-B-树&quot;&gt;&lt;a href=&quot;#数据库中的-B-树与-B-树&quot; class=&quot;headerlink&quot; title=&quot;数据库中的 B 树与 B+ 树&quot;&gt;&lt;/a&gt;数据库中的 B 树与 B+</description>
+      <description>&lt;h2 id=&quot;数据库中的-B-树-与-B-树&quot;&gt;&lt;a href=&quot;#数据库中的-B-树-与-B-树&quot; class=&quot;headerlink&quot; title=&quot;数据库中的 B 树 与 B^+^ 树&quot;&gt;&lt;/a&gt;数据库中的 B 树 与 B^+^ 树&lt;/h2&gt;&lt;p&gt;参考博客：&lt;a</description>
           
         
       
@@ -73,7 +177,7 @@
     </item>
     
     <item>
-      <title>LearnedIndex-02</title>
+      <title>02-哈希与布隆过滤</title>
       <link>https://flyboy716.github.io/posts/8043.html</link>
       <guid>https://flyboy716.github.io/posts/8043.html</guid>
       <pubDate>Fri, 12 Apr 2024 15:10:26 GMT</pubDate>
@@ -127,7 +231,7 @@
     </item>
     
     <item>
-      <title>LearnedIndex</title>
+      <title>03-学习型索引-RMI</title>
       <link>https://flyboy716.github.io/posts/36c1.html</link>
       <guid>https://flyboy716.github.io/posts/36c1.html</guid>
       <pubDate>Fri, 12 Apr 2024 13:25:41 GMT</pubDate>
@@ -154,7 +258,7 @@
     </item>
     
     <item>
-      <title>Alex</title>
+      <title>07-学习型索引-Alex</title>
       <link>https://flyboy716.github.io/posts/53ff.html</link>
       <guid>https://flyboy716.github.io/posts/53ff.html</guid>
       <pubDate>Fri, 12 Apr 2024 13:15:27 GMT</pubDate>
@@ -181,7 +285,7 @@
     </item>
     
     <item>
-      <title>FINEdex</title>
+      <title>08-学习型索引-FINEdex</title>
       <link>https://flyboy716.github.io/posts/323e.html</link>
       <guid>https://flyboy716.github.io/posts/323e.html</guid>
       <pubDate>Fri, 12 Apr 2024 13:00:13 GMT</pubDate>
